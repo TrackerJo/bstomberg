@@ -1,0 +1,346 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* ------------------------------------------------------------------ hero */
+
+.hero {
+  position: relative;
+  /* The hero absorbs every pixel the sheet has left over, and gives them back
+     first when it runs short. What it gives back is the centred whitespace
+     around the copy, never the strip below it. */
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  align-content: center;
+  overflow: hidden;
+  /* Explicit ground + isolation so the portrait's multiply blend composites
+     against paper and the rule overlay, and nothing outside the hero. */
+  background: var(--paper);
+  isolation: isolate;
+}
+
+.hero__gutter {
+  grid-column: 1;
+  position: relative;
+  z-index: 2;
+  padding: var(--hero-band) 0 0 var(--edge);
+}
+
+.hero__copy {
+  grid-column: 2;
+  position: relative;
+  z-index: 2;
+  padding: var(--hero-band) var(--edge) var(--hero-band) var(--cell-pad);
+}
+
+.hero__headline {
+  font-size: var(--fs-display);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.028em;
+  color: var(--violet-deep);
+}
+
+.hero__line {
+  display: block;
+  overflow: hidden;
+  /* Breathing room so the clip never shaves a descender or an overhang. */
+  padding: 0.06em 0.04em 0.12em;
+  margin: -0.06em -0.04em -0.12em;
+}
+
+.hero__lineInner {
+  display: block;
+}
+
+/* Stacked by default: an inline run of three long strings drops its "/"
+   separators onto lines of their own as soon as it wraps. */
+.hero__role {
+  margin-top: clamp(0.9rem, 2.2vh, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.hero__sep {
+  display: none;
+  color: var(--rule-ui);
+}
+
+.hero__standfirst {
+  margin-top: clamp(0.75rem, 1.8vh, 1.25rem);
+  max-width: 46ch;
+  color: var(--ink);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+  margin-top: clamp(1rem, 3vh, 2.5rem);
+}
+
+/* --------------------------------------------------------------- portrait */
+
+.hero__portrait {
+  z-index: 1;
+  width: 100%;
+  max-width: none;
+  object-fit: cover;
+  /* The photograph is high-key on near-white: multiplying against paper makes
+     its background vanish and lets the ledger rules read straight through. */
+  mix-blend-mode: multiply;
+  /* No `filter` here, ever: a filter on this element cancels the multiply
+     blend in Chrome and the portrait vanishes. The white-point lift that
+     makes the backdrop dissolve is baked into the JPEG instead. */
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------------------------------------------------------- ledger strip */
+
+.strip {
+  /* Never shrink. The strip getting quietly compressed, then clipped, is the
+     exact failure the one-viewport layout used to have. */
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--hairline);
+  margin: 0;
+  border-top: var(--hairline) solid var(--rule-strong);
+  background: var(--rule-strong);
+}
+
+.strip__cell {
+  padding: var(--sp-sm) clamp(1rem, 2.4vw, 1.75rem);
+  background: var(--paper);
+}
+
+.strip__label {
+  color: var(--violet);
+}
+
+.strip__value {
+  margin: var(--sp-2xs) 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------- mobile */
+
+/*
+ * Phones are not a squeezed desktop. The portrait is the site's whole visual
+ * argument, and stacked under the copy it sat around 700px down, below the
+ * fold on every phone made. Here it comes first, directly under the masthead,
+ * as a printed band that dissolves downward into the paper the headline sits
+ * on. One viewport is not the promise on this device; getting her face and
+ * the first line of the headline into the first screen is.
+ */
+/* Also claims short-and-wide windows: the one-sheet composition needs height
+   as much as it needs width, and a 600px-tall viewport has neither the room
+   for a three-line display headline nor anything to gain from a 44% portrait
+   column. */
+@media (max-width: 59.999rem), (max-height: 38.999rem) {
+  .hero {
+    grid-template-rows: auto auto;
+    align-content: start;
+  }
+
+  /* Ruling starts below the photograph, never across it. */
+  .hero .rules {
+    top: var(--portrait-band);
+  }
+
+  .hero__portrait {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    height: var(--portrait-band);
+    object-position: 84% 16%;
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+
+  .hero__gutter {
+    grid-row: 2;
+  }
+
+  .hero__copy {
+    grid-row: 2;
+    padding-top: 0;
+  }
+
+  .strip__cell:nth-child(odd) {
+    padding-left: var(--edge);
+  }
+
+  .strip__cell:nth-child(even) {
+    padding-right: var(--edge);
+  }
+}
+
+/* -------------------------------------------------------------- desktop */
+
+/*
+ * Desktop keeps the one-sheet promise, and keeps it honestly: the vertical
+ * rhythm is measured in vh, not in vw, because what was overflowing was never
+ * width. A 1440x723 laptop and a 1440x950 desktop get the same composition at
+ * different densities instead of the same padding and a clipped strip.
+ */
+@media (min-width: 60rem) and (min-height: 39rem) {
+  .hero {
+    grid-template-columns: var(--gutter) minmax(0, 1fr) 44%;
+  }
+
+  /* The rules layer stops at the photograph's left edge, so the ruling reads
+     under the copy and nowhere across her. */
+  .hero .rules {
+    right: 50%;
+  }
+
+  .hero__role {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.6rem;
+  }
+
+  .hero__sep {
+    display: inline;
+  }
+
+  .hero__portrait {
+    /* Must clear the grid placement: an absolutely-positioned grid item with
+       an explicit row resolves inset and height against that grid area, not
+       against the hero. With `auto`, the hero's padding box is the frame. */
+    grid-area: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    /* Explicit width: a replaced element ignores `right` when width is auto,
+       and would overflow its own frame by its intrinsic aspect ratio. */
+    width: 50%;
+    height: 100%;
+    object-position: 96% 26%;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0 0 0 / 0.55) 34%,
+      #000 62%
+    );
+  }
+}
+
+@media (min-width: 52rem) {
+  .strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .strip__cell:first-child {
+    padding-left: var(--edge);
+  }
+
+  .strip__cell:last-child {
+    padding-right: var(--edge);
+  }
+}
+
+/* --------------------------------------------------------------- motion */
+/* One orchestrated page-load. Transform and opacity only. Gated on
+   [data-animate] so it stays a first-load event: returning to Home from
+   another route re-renders without it. */
+
+@keyframes hero-rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+@keyframes hero-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@keyframes hero-portrait-in {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+}
+
+[data-animate] .hero__lineInner {
+  animation: hero-rise 900ms var(--ease-out-quint) backwards;
+}
+
+[data-animate] .hero__line:nth-child(1) .hero__lineInner {
+  animation-delay: 180ms;
+}
+[data-animate] .hero__line:nth-child(2) .hero__lineInner {
+  animation-delay: 260ms;
+}
+[data-animate] .hero__line:nth-child(3) .hero__lineInner {
+  animation-delay: 340ms;
+}
+
+[data-animate] .hero__gutter,
+[data-animate] .hero__role,
+[data-animate] .hero__standfirst,
+[data-animate] .hero__actions {
+  animation: hero-fade-rise var(--dur-slow) var(--ease-out-quint) backwards;
+}
+
+[data-animate] .hero__gutter {
+  animation-delay: 420ms;
+}
+[data-animate] .hero__role {
+  animation-delay: 480ms;
+}
+[data-animate] .hero__standfirst {
+  animation-delay: 560ms;
+}
+[data-animate] .hero__actions {
+  animation-delay: 640ms;
+}
+
+[data-animate] .hero__portrait {
+  animation: hero-portrait-in 1100ms var(--ease-out-quint) 260ms backwards;
+}
+
+/* Fade, no rise. The strip sits on the bottom edge of the sheet, and a 12px
+   entrance translate there is enough to open a scrollbar for the length of
+   the animation on a page whose whole point is that it does not scroll. */
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+[data-animate] .strip__cell {
+  animation: hero-fade var(--dur-slow) var(--ease-out-quint) 660ms backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-animate] .hero__lineInner,
+  [data-animate] .hero__gutter,
+  [data-animate] .hero__role,
+  [data-animate] .hero__standfirst,
+  [data-animate] .hero__actions,
+  [data-animate] .hero__portrait,
+  [data-animate] .strip__cell {
+    animation: none;
+  }
+}

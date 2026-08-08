@@ -1,0 +1,94 @@
+.show {
+  display: grid;
+  gap: var(--sp-lg);
+  align-items: start;
+}
+
+.show__art {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2xs);
+  aspect-ratio: 1;
+  width: min(100%, 15rem);
+  padding: var(--sp-md);
+  text-align: center;
+  background: var(--paper-2);
+  border: var(--hairline) solid var(--rule-strong);
+}
+
+.show__art .label {
+  color: var(--violet);
+}
+
+.show__art-spec {
+  color: var(--ink-muted);
+  letter-spacing: 0.16em;
+}
+
+.show__name {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--violet-deep);
+}
+
+.show__tagline {
+  margin-top: var(--sp-2xs);
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.show__description {
+  margin-top: var(--sp-md);
+  line-height: 1.6;
+}
+
+.show__cohost {
+  margin-top: var(--sp-sm);
+}
+
+.episode__n {
+  color: var(--violet);
+  overflow-wrap: anywhere;
+}
+
+.episode__blurb {
+  margin-top: var(--sp-2xs);
+}
+
+/* Beats `.link-cluster a { display: inline-block }`, which would otherwise
+   drop the glyph onto its own line above the word. */
+.link-cluster a.episode__play {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  padding-block: 0.25rem;
+  min-height: 1.5rem;
+  white-space: nowrap;
+}
+
+.press__outlet {
+  color: var(--violet);
+}
+
+@media (min-width: 40rem) {
+  .show {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+    column-gap: var(--sp-xl);
+  }
+}
+
+@media (min-width: 60rem) {
+  /* Figures stack on the digit against the right edge of their track. */
+  .episode__duration,
+  .press__date {
+    text-align: right;
+  }
+
+  .episode__n {
+    padding-top: 0.35rem;
+  }
+}

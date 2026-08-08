@@ -1,0 +1,108 @@
+.footer {
+  padding: var(--sp-xl) var(--edge);
+  background: var(--violet-deep);
+  color: var(--paper);
+}
+
+.footer__inner {
+  display: grid;
+  gap: var(--sp-xl) var(--sp-lg);
+  align-items: start;
+}
+
+.footer__name {
+  font-family: var(--font-serif);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Both of these carry .label, which sets --ink-muted for use on paper. On the
+   violet band that reads as mud, so the scoped selectors win on specificity
+   rather than on stylesheet order. */
+.footer .footer__colophon {
+  margin-top: var(--sp-sm);
+  color: var(--violet-soft);
+  letter-spacing: 0.1em;
+}
+
+/* Column headings: full paper, on a hairline, so the footer reads as three
+   ruled columns rather than one field of links. 11.53:1 on the band. */
+.footer .footer__label {
+  color: var(--paper);
+  margin-bottom: var(--sp-sm);
+  padding-bottom: var(--sp-xs);
+  border-bottom: var(--hairline) solid
+    color-mix(in oklch, var(--paper) 32%, transparent);
+}
+
+.footer__list {
+  display: grid;
+  gap: var(--sp-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__list a {
+  display: block;
+  padding-block: 0.25rem;
+  min-height: 1.5rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  color: var(--paper);
+  text-decoration-color: color-mix(in oklch, var(--paper) 45%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+.footer__list a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Demoted next to the two columns above it: this is a way back, not the point
+   of the footer. */
+.footer__nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem clamp(1rem, 3vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__nav a {
+  display: block;
+  padding-block: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet-soft);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.footer__nav a:hover {
+  color: var(--paper);
+  border-bottom-color: var(--paper);
+}
+
+.footer .insert {
+  background: color-mix(in oklch, var(--paper) 22%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--paper) 22%, transparent);
+  color: var(--paper);
+}
+
+@media (min-width: 46rem) {
+  .footer__inner {
+    grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
+  }
+
+  .footer__nav {
+    grid-column: 1 / -1;
+    padding-top: var(--sp-md);
+    border-top: var(--hairline) solid
+      color-mix(in oklch, var(--paper) 25%, transparent);
+  }
+}

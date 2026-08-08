@@ -1,0 +1,103 @@
+/* Design tokens. Mirrors DESIGN.md — keep the two in sync. */
+
+:root {
+  color-scheme: light;
+
+  /* --- Color -------------------------------------------------------- */
+  /* Warm paper stock. Every neutral is tinted; nothing is pure. */
+  --paper: oklch(96.5% 0.013 88);
+  --paper-2: oklch(93.5% 0.017 86);
+
+  --ink: oklch(27% 0.045 288); /* 13.75:1 on paper */
+  --ink-muted: oklch(46% 0.03 288); /* 6.49:1  */
+
+  --violet: oklch(45% 0.155 293); /* 7.20:1  */
+  --violet-deep: oklch(33% 0.11 292); /* 11.50:1 */
+  --violet-soft: oklch(90% 0.04 293);
+
+  /* Rules. Only --rule-ui may bound an interactive target (3.60:1). */
+  --rule-ui: oklch(60% 0.04 291);
+  --rule-strong: oklch(74% 0.03 290);
+  --rule: oklch(86% 0.018 290);
+
+  /* --- Type --------------------------------------------------------- */
+  --font-serif: 'Literata', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Public Sans', ui-sans-serif, system-ui, sans-serif;
+
+  /* Sized so the longest headline line ("Academic Rigor") clears the copy
+     column at every width, including the 960px layout switch. The vh term is
+     what keeps three display lines from pushing the ledger strip off a short
+     laptop screen: on a wide but shallow viewport, height wins. */
+  --fs-display: clamp(2.2rem, min(6vw - 0.25rem, 10vh), 7.5rem);
+  --fs-h1: clamp(2.25rem, 1.3rem + 3.4vw, 4.25rem);
+  --fs-h2: clamp(1.5rem, 1.1rem + 1.5vw, 2.25rem);
+  --fs-h3: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --fs-body: clamp(1rem, 0.96rem + 0.22vw, 1.125rem);
+  --fs-sm: 0.9375rem;
+  --fs-label: 0.75rem;
+
+  --measure: 68ch;
+
+  /* --- Space -------------------------------------------------------- */
+  --sp-2xs: 0.25rem;
+  --sp-xs: 0.5rem;
+  --sp-sm: 0.75rem;
+  --sp-md: 1.25rem;
+  --sp-lg: 2rem;
+  --sp-xl: 3.25rem;
+  --band: clamp(3.5rem, 8vw, 7rem);
+  --edge: clamp(1.25rem, 4vw, 4rem);
+
+  /* Home's vertical rhythm, measured in vh rather than vw, because what used
+     to push the ledger strip off a laptop screen was never width. Stacked
+     value here; the one-sheet value is in the breakpoint block below. */
+  --hero-band: clamp(1.25rem, 4vh, 2.75rem);
+
+  /* Left gutter carrying the section numeral. Doubles as the first rule. */
+  --gutter: clamp(2.25rem, 7vw, 6.5rem);
+
+  /* --- Ledger columns ------------------------------------------------ */
+  /* The interior page is ruled like a worksheet: a gutter, a wide body, and
+     two data tracks on the right. Rows and rules read from the same two
+     numbers, so a hairline always lands exactly on a column boundary.
+     Both tracks are zero below the breakpoint, where the row stacks. */
+  --track-2: 0px;
+  --track-3: 0px;
+  --col-2: calc(100% - var(--track-2) - var(--track-3));
+  --col-3: calc(100% - var(--track-3));
+
+  /* Breathing room between a rule and the text in the cell beside it. */
+  --cell-pad: clamp(1rem, 2.4vw, 2.25rem);
+
+  /* Height of the portrait band in the stacked hero. Shared with the rules
+     layer, which starts below it so no hairline crosses the photograph. */
+  --portrait-band: clamp(240px, 38vh, 380px);
+
+  /* --- Form --------------------------------------------------------- */
+  /* Paper does not have rounded corners. */
+  --radius: 0;
+  --hairline: 1px;
+
+  /* --- Motion ------------------------------------------------------- */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur-base: 260ms;
+  --dur-slow: 720ms;
+}
+
+/* The width at which the two right-hand data tracks earn their space. Below
+   it there is not enough room for four columns without crushing the title. */
+@media (min-width: 60rem) {
+  :root {
+    --track-2: clamp(8rem, 15vw, 14rem);
+    --track-3: clamp(7.5rem, 12vw, 11.5rem);
+  }
+}
+
+/* Home's one-sheet composition. It needs height as much as width, so the
+   query asks for both; a 600px-tall window gets the stacked layout instead. */
+@media (min-width: 60rem) and (min-height: 39rem) {
+  :root {
+    --hero-band: clamp(1rem, 4.5vh, 5.5rem);
+  }
+}

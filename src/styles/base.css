@@ -1,0 +1,237 @@
+/* Reset, element defaults, and the primitives shared by every page. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  color: var(--violet-deep);
+}
+
+h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--violet-deep);
+}
+
+h3 {
+  font-size: var(--fs-h3);
+  line-height: 1.28;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--violet);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* One focus ring, never removed, legible on paper and on the violet band. */
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+}
+
+.on-violet :focus-visible {
+  outline-color: var(--paper);
+}
+
+::selection {
+  background: var(--violet-soft);
+  color: var(--violet-deep);
+}
+
+/* --- Primitives ----------------------------------------------------- */
+
+/* The one uppercase treatment on the site. Public Sans, tracked, tabular. */
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+.tabular {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ruled rectangle, drawn as a form field rather than a pill. */
+.field-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  min-height: 2.75rem;
+  padding: 0.6rem 1.1rem;
+  border: var(--hairline) solid var(--rule-ui);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--violet-deep);
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-base) var(--ease-out-quint),
+    border-color var(--dur-base) var(--ease-out-quint),
+    color var(--dur-base) var(--ease-out-quint);
+}
+
+.field-button:hover {
+  background: var(--violet-soft);
+  border-color: var(--violet-deep);
+  color: var(--violet-deep);
+}
+
+.field-button--solid {
+  background: var(--violet-deep);
+  border-color: var(--violet-deep);
+  color: var(--paper);
+}
+
+.field-button--solid:hover {
+  background: var(--violet);
+  border-color: var(--violet);
+  color: var(--paper);
+}
+
+/* Horizontal run of field-buttons, wrapping. */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-sm) var(--sp-md);
+  margin-top: var(--sp-lg);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Inline link cluster on publication and episode rows. Always visible. */
+.link-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm) var(--sp-md);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+}
+
+.link-cluster a {
+  display: inline-block;
+  padding-block: 0.25rem;
+  min-height: 1.5rem;
+}
+
+/* Placeholder marker. Delete this rule once src/content.ts is filled in. */
+.insert {
+  background: var(--violet-soft);
+  box-shadow: 0 0 0 2px var(--violet-soft);
+  color: var(--violet-deep);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--sp-xs);
+  top: var(--sp-xs);
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--paper);
+  color: var(--violet-deep);
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: translateY(-160%);
+  transition: transform var(--dur-base) var(--ease-out-quint);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

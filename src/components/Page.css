@@ -1,0 +1,262 @@
+.page {
+  position: relative;
+  /* The rules layer sits at z-index 0; content has to clear it. */
+  isolation: isolate;
+}
+
+/* ------------------------------------------------------------ page grid */
+
+/*
+ * One template, used by every band on the page and by every row inside a
+ * ruled list. Because the vertical rules are positioned from the same two
+ * track widths, a hairline always lands exactly on a column boundary rather
+ * than near one.
+ *
+ *   1  gutter        numerals, episode numbers
+ *   2  body          the argument: titles, prose, headings
+ *   3  track-2       details: coauthors, duration, outlet
+ *   4  track-3       links and controls
+ */
+.row,
+.entry {
+  display: grid;
+  grid-template-columns:
+    var(--gutter)
+    minmax(0, 1fr)
+    var(--track-2)
+    var(--track-3);
+  position: relative;
+  z-index: 1;
+}
+
+.row__gutter {
+  grid-column: 1;
+  padding-left: var(--edge);
+}
+
+.row__body {
+  grid-column: 2 / -1;
+  padding-inline: var(--cell-pad) var(--edge);
+}
+
+.page__head {
+  padding-block: clamp(2.5rem, 6vw, 5rem) clamp(2rem, 4vw, 3.5rem);
+}
+
+.page__standfirst {
+  margin-top: var(--sp-md);
+  color: var(--ink-muted);
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3125rem);
+  line-height: 1.5;
+}
+
+.section {
+  padding-block: clamp(2.5rem, 5vw, 4.25rem);
+  border-top: var(--hairline) solid var(--rule-strong);
+  position: relative;
+  z-index: 1;
+}
+
+.section__head {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+}
+
+.section__head .row__gutter {
+  padding-top: 0.5rem;
+}
+
+.section__title {
+  grid-column: 2;
+  padding-inline: var(--cell-pad) var(--edge);
+  margin-bottom: var(--sp-lg);
+}
+
+/* Non-list content, indented to sit in the body column like a section title. */
+.section__body {
+  position: relative;
+  z-index: 1;
+  padding-left: calc(var(--gutter) + var(--cell-pad));
+  padding-right: var(--edge);
+}
+
+/* ------------------------------------------------------- ruled list rows */
+/* Publications and episodes are hairline-separated rows, never cards. The
+   separators are --rule-strong, not --rule: at 1.39:1 the hairline was below
+   the threshold where it could do the job cards were doing. */
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--hairline) solid var(--rule-strong);
+}
+
+.rows > li {
+  border-bottom: var(--hairline) solid var(--rule-strong);
+}
+
+.rows > li > .entry {
+  padding-block: clamp(1.25rem, 2.4vw, 1.75rem);
+  align-items: start;
+}
+
+/* Cells sit inside their column, clear of the rule to their left. */
+.entry > * {
+  padding-inline: var(--cell-pad) 0;
+  min-width: 0;
+}
+
+.entry > *:first-child {
+  padding-left: var(--edge);
+  padding-right: 0;
+}
+
+.entry > *:last-child {
+  padding-right: var(--edge);
+}
+
+/* Column headings. A worksheet labels its columns. */
+.rows__header {
+  display: none;
+}
+
+.entry__title {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.entry__title a {
+  color: inherit;
+  text-decoration-color: var(--rule-ui);
+}
+
+.entry__title a:hover {
+  color: var(--violet);
+  text-decoration-color: currentColor;
+}
+
+.entry__meta {
+  margin-top: var(--sp-2xs);
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.entry__sub {
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.45;
+  color: var(--ink-muted);
+  overflow-wrap: break-word;
+}
+
+/* Stacked layout: the tracks are zero wide, so every cell shares column 2.
+   Row gap rather than sibling margins, so an empty gutter cell does not push
+   the title down a row's worth of space it never asked for. */
+@media (max-width: 59.999rem) {
+  .row,
+  .entry {
+    grid-template-columns: var(--gutter) minmax(0, 1fr);
+  }
+
+  .rows > li > .entry {
+    row-gap: var(--sp-sm);
+  }
+
+  .entry > * {
+    grid-column: 2;
+    padding-inline: var(--cell-pad) var(--edge);
+  }
+
+  .entry > .entry__gutter {
+    grid-column: 1;
+    padding-inline: var(--edge) 0;
+  }
+}
+
+@media (min-width: 60rem) {
+  .rows__header {
+    display: block;
+    border-bottom: var(--hairline) solid var(--rule-strong);
+  }
+
+  .rows__header .entry {
+    padding-block: var(--sp-xs);
+    align-items: baseline;
+  }
+
+  .rows__header .label {
+    color: var(--ink-muted);
+  }
+
+  .entry__links-head {
+    text-align: right;
+  }
+
+  /* Links land in a fixed column against the right rule, so a reader hunting
+     a PDF scans one edge and the column boundary draws the association. */
+  .entry__links {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .entry__sub--track {
+    padding-top: 0.35rem;
+  }
+}
+
+/* -------------------------------------------------------------- fact list */
+
+.facts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border-top: var(--hairline) solid var(--rule-strong);
+}
+
+.facts > div {
+  display: grid;
+  gap: var(--sp-2xs) var(--sp-lg);
+  padding-block: var(--sp-md);
+  border-bottom: var(--hairline) solid var(--rule);
+}
+
+.facts dt {
+  color: var(--violet);
+}
+
+.facts dd {
+  margin: 0;
+  max-width: var(--measure);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+}
+
+@media (min-width: 40rem) {
+  .facts > div {
+    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+/* -------------------------------------------------------------- prose */
+
+.prose > * + * {
+  margin-top: var(--sp-md);
+}
+
+.prose p {
+  max-width: var(--measure);
+  line-height: 1.65;
+}
+
+.prose__lede {
+  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.4375rem);
+  line-height: 1.45;
+  color: var(--violet-deep);
+}

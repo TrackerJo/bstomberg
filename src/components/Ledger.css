@@ -1,0 +1,41 @@
+.rules {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.rules__line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--hairline);
+  background: var(--rule);
+}
+
+.rules[data-animated] .rules__line {
+  transform: scaleY(0);
+  transform-origin: top center;
+  animation: rule-draw var(--dur-slow) var(--ease-out-quint) forwards;
+}
+
+@keyframes rule-draw {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.gutter-number {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  color: var(--violet);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rules[data-animated] .rules__line {
+    transform: none;
+    animation: none;
+  }
+}

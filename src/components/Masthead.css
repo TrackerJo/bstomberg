@@ -1,0 +1,95 @@
+.masthead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-xs);
+  /* Tight on phones: at the old --sp-md this band took 14% of a 390x780
+     screen, on every page, before any content. */
+  padding: var(--sp-sm) var(--edge);
+  background: var(--violet-deep);
+  color: var(--paper);
+}
+
+.masthead__name {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 0.9rem + 0.6vw, 1.35rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.masthead__name:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.masthead__nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem clamp(0.7rem, 2.4vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.masthead__link {
+  display: block;
+  padding-block: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet-soft);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color var(--dur-base) var(--ease-out-quint);
+}
+
+.masthead__link:hover {
+  color: var(--paper);
+  border-bottom-color: color-mix(in oklch, var(--paper) 45%, transparent);
+}
+
+/* Current page carries a rule as well as a color shift, never color alone. */
+.masthead__link[data-current] {
+  color: var(--paper);
+  border-bottom-color: var(--paper);
+}
+
+/* Five items have to clear a 360px screen on one row. */
+@media (max-width: 45.999rem) {
+  .masthead__link {
+    letter-spacing: 0.09em;
+  }
+}
+
+@media (max-width: 24.5rem) {
+  .masthead__nav ul {
+    gap: 0.35rem 0.5rem;
+  }
+
+  .masthead__link {
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (min-width: 46rem) {
+  .masthead {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-lg);
+    /* Measured in vh: on a short laptop the band is what Home can least
+       afford, and on a tall display it can breathe. */
+    padding-block: clamp(0.625rem, 1.8vh, 1.25rem);
+  }
+
+  .masthead__nav ul {
+    justify-content: flex-end;
+  }
+}

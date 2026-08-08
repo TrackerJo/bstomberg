@@ -1,0 +1,35 @@
+/* The shell is a flex column so Home can claim exactly one viewport without
+   hard-coding the masthead's height. */
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.shell > main {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.shell[data-home] > main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Interior pages: main is a column so .page can fill the remaining height,
+   which keeps the ledger rules running all the way down to the footer band
+   instead of stopping in mid-air above it. */
+.shell:not([data-home]) > main {
+  display: flex;
+  flex-direction: column;
+}
+
+.shell:not([data-home]) .page {
+  flex: 1 1 auto;
+  padding-bottom: var(--band);
+}
+
+/* main is focus-targeted by the skip link but is not itself interactive. */
+.shell > main:focus {
+  outline: none;
+}
