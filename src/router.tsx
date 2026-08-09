@@ -21,6 +21,7 @@ import {
   type ReactNode,
 } from 'react'
 import { RouterContext, useRouter } from './router-context'
+import { toHref, toRoutePath } from './base-path'
 
 export function RouterProvider({
   children,
@@ -31,14 +32,14 @@ export function RouterProvider({
   initialPath?: string
 }) {
   const [path, setPath] = useState(
-    () => initialPath ?? window.location.pathname,
+    () => initialPath ?? toRoutePath(window.location.pathname),
   )
   const [navCount, setNavCount] = useState(0)
   const isFirstRender = useRef(true)
 
   useEffect(() => {
     const onPop = () => {
-      setPath(window.location.pathname)
+      setPath(toRoutePath(window.location.pathname))
       setNavCount((n) => n + 1)
     }
     window.addEventListener('popstate', onPop)
@@ -46,8 +47,8 @@ export function RouterProvider({
   }, [])
 
   const navigate = useCallback((to: string) => {
-    if (to === window.location.pathname) return
-    window.history.pushState({}, '', to)
+    if (to === toRoutePath(window.location.pathname)) return
+    window.history.pushState({}, '', toHref(to))
     setPath(to)
     setNavCount((n) => n + 1)
   }, [])
@@ -79,7 +80,8 @@ export function Link({ href, onClick, ...rest }: LinkProps) {
 
   return (
     <a
-      href={href}
+      // Routes are authored root-relative; the deployed prefix is added here.
+      href={isInternal ? toHref(href) : href}
       onClick={(event) => {
         onClick?.(event)
         if (!isInternal) return

@@ -1,75 +1,78 @@
-# React + TypeScript + Vite
+# bstomberg
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal site for Bridget Stomberg, PhD. React + TypeScript + Vite, prerendered
+to static HTML, deployed to GitHub Pages.
 
-Currently, two official plugins are available:
+Design intent lives in [PRODUCT.md](PRODUCT.md) and [DESIGN.md](DESIGN.md).
+Read those before changing anything visual.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Filling in the content
 
-## React Compiler
+Every piece of real-world copy is a `[INSERT …]` placeholder in
+[`src/content.ts`](src/content.ts). Unfilled placeholders render with a violet
+highlight so they are impossible to miss in the browser; the highlight
+disappears on its own once a string is replaced. Nothing about a real person is
+invented anywhere in that file.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Fill that one file and the whole site populates. When every placeholder is
+gone, delete the `.insert` rule at the bottom of `src/styles/base.css`.
 
-## Expanding the ESLint configuration
+## Commands
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev       # dev server with HMR
+npm run lint
+npm run build     # client bundle + SSR bundle + prerender to dist/
+npm run preview   # serve the built site
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+`npm run build` produces real HTML for every route:
 
 ```
+dist/index.html            /
+dist/about/index.html      /about
+dist/research/index.html   /research
+dist/podcast/index.html    /podcast
+dist/contact/index.html    /contact
+dist/404.html              anything else, with a real 404 status
+```
+
+React hydrates on top and handles navigation from there. A pasted link, a
+refresh, a crawler, and a link unfurl all get served content without any
+JavaScript running.
+
+## Deploying to GitHub Pages
+
+The repo is set up for a **project site** at
+`https://<user>.github.io/bstomberg/`.
+
+1. Push to GitHub with the repository named `bstomberg`.
+2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
+3. Push to `main`. [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+   lints, builds, prerenders, and publishes `dist/`.
+
+Two environment variables control the URLs, both set in the workflow:
+
+| Variable | Value | Notes |
+|---|---|---|
+| `BASE_PATH` | `/bstomberg/` | Must match the repository name. Trailing slash required. |
+| `SITE_URL` | `https://<user>.github.io` | **Scheme and host only.** The build adds `BASE_PATH` itself. |
+
+`SITE_URL` is what makes the Open Graph image and canonical links absolute,
+which Twitter and some scrapers require. Leave it unset and those URLs are
+emitted root-relative, which is fine for Slack and iMessage but not for
+everything.
+
+### Custom domain
+
+Set `BASE_PATH=/` and `SITE_URL=https://yourdomain.com` in the workflow, add
+the domain under Settings → Pages, and commit a `public/CNAME` containing it.
+Nothing else needs to change: `src/base-path.ts` is the only module that knows
+about the path prefix.
+
+### Other hosts
+
+Any static host works. Serve `dist/` as-is with directory indexes enabled and
+`404.html` for unmatched paths. There is no SPA catch-all rewrite, and adding
+one would break the real 404 status.

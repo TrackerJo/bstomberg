@@ -23,15 +23,41 @@ import { fileURLToPath } from 'node:url'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
 
-const { render, pageMeta, notFoundMeta, site } = await import(
+const { render, pageMeta, notFoundMeta, site, basePath } = await import(
   path.join(root, 'dist-ssr', 'entry-server.js')
 )
 
-// Trailing slashes here would produce "https://example.com//about".
-const origin = (process.env.SITE_URL ?? site.url ?? '').replace(/\/+$/, '')
+const prefix = basePath.replace(/\/+$/, '')
+
+/**
+ * Scheme and host only. The deployed path prefix is added separately, so a
+ * SITE_URL of "https://user.github.io/bstomberg" would otherwise produce
+ * "https://user.github.io/bstomberg/bstomberg/research".
+ */
+function readOrigin() {
+  const raw = (process.env.SITE_URL ?? site.url ?? '').trim()
+  if (!raw) return ''
+  try {
+    const url = new URL(raw)
+    if (url.pathname !== '/') {
+      console.warn(
+        `  ! SITE_URL should be scheme and host only; ignoring path "${url.pathname}"`,
+      )
+    }
+    return url.origin
+  } catch {
+    console.warn(`  ! SITE_URL is not a valid URL ("${raw}"), ignoring it`)
+    return ''
+  }
+}
+
+const origin = readOrigin()
+
+/** Route path to deployed URL path: "/research" -> "/bstomberg/research". */
+const deployed = (p) => prefix + p
 const absolute = (p) => (origin ? origin + p : p)
 
-const OG_IMAGE = '/social-card.jpg'
+const OG_IMAGE = deployed('/social-card.jpg')
 
 const template = await fs.readFile(path.join(dist, 'index.html'), 'utf8')
 
@@ -64,9 +90,14 @@ async function writeSocialCard() {
   }
   await fs.copyFile(
     path.join(dist, 'assets', clientPortrait),
-    path.join(dist, OG_IMAGE),
+    path.join(dist, 'social-card.jpg'),
   )
   return true
+}
+
+/** GitHub Pages runs Jekyll unless told not to, which drops some paths. */
+async function writeNoJekyll() {
+  await fs.writeFile(path.join(dist, '.nojekyll'), '', 'utf8')
 }
 
 function escapeAttr(value) {
@@ -110,7 +141,7 @@ function socialTags({ title, description, url, hasImage }) {
 }
 
 function buildDocument({ appHtml, title, description, routePath, hasImage }) {
-  const url = origin && routePath ? absolute(routePath) : ''
+  const url = origin && routePath ? absolute(deployed(routePath)) : ''
 
   let out = template
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeAttr(title)}</title>`)
@@ -152,8 +183,9 @@ async function writeRoute(routePath, outFile, meta) {
 }
 
 const hasImage = await writeSocialCard()
+await writeNoJekyll()
 
-console.log('prerendering:')
+console.log(`prerendering (base ${basePath}):`)
 for (const [routePath, meta] of Object.entries(pageMeta)) {
   const outFile =
     routePath === '/' ? 'index.html' : `${routePath.slice(1)}/index.html`

@@ -13,15 +13,20 @@
   background: var(--rule);
 }
 
+/*
+ * The resting state is the drawn rule, and the animation reaches back to the
+ * undrawn one. The inverse (a base of scaleY(0) animating forwards) hides the
+ * rule permanently on any client where the animation does not run, which is
+ * a bad trade for an entrance effect.
+ */
 .rules[data-animated] .rules__line {
-  transform: scaleY(0);
   transform-origin: top center;
-  animation: rule-draw var(--dur-slow) var(--ease-out-quint) forwards;
+  animation: rule-draw var(--dur-slow) var(--ease-out-quint) backwards;
 }
 
 @keyframes rule-draw {
-  to {
-    transform: scaleY(1);
+  from {
+    transform: scaleY(0);
   }
 }
 

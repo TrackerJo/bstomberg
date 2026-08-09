@@ -16,6 +16,9 @@ import { notFoundMeta, pageMeta, site } from './content'
 
 export { pageMeta, notFoundMeta, site }
 
+/** Deployed path prefix, with trailing slash. "/bstomberg/" on GitHub Pages. */
+export const basePath = import.meta.env.BASE_URL
+
 export function render(path: string) {
   const html = renderToString(
     <StrictMode>
