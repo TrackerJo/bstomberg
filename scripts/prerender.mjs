@@ -19,6 +19,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { resolveDeployTarget } from '../deploy-targets.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
@@ -33,9 +34,18 @@ const prefix = basePath.replace(/\/+$/, '')
  * Scheme and host only. The deployed path prefix is added separately, so a
  * SITE_URL of "https://user.github.io/bstomberg" would otherwise produce
  * "https://user.github.io/bstomberg/bstomberg/research".
+ *
+ * Falls back to whichever DEPLOY_TARGET built this bundle (custom domain or
+ * the GitHub Pages project URL), so an explicit SITE_URL is only needed for a
+ * one-off origin that doesn't match either named target.
  */
 function readOrigin() {
-  const raw = (process.env.SITE_URL ?? site.url ?? '').trim()
+  const raw = (
+    process.env.SITE_URL ??
+    resolveDeployTarget().siteUrl ??
+    site.url ??
+    ''
+  ).trim()
   if (!raw) return ''
   try {
     const url = new URL(raw)

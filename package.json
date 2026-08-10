@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && npm run build:ssr && npm run prerender",
+    "build:custom": "npm run build",
+    "build:github": "DEPLOY_TARGET=github npm run build",
     "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr",
     "prerender": "node scripts/prerender.mjs",
     "lint": "eslint .",
