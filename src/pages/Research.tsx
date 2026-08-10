@@ -56,7 +56,7 @@ function Entry({ item }: { item: Publication }) {
 export function Research() {
   return (
     <Page title="Research &amp; Publications" standfirst={research.intro}>
-      <Section n="01" title="Selected Journal Publications">
+      <Section title="Selected Journal Publications">
         <ul className="rows">
           <RowHeader cols={['Publication', 'Year & Coauthors', 'Read']} />
           {publications.map((item, i) => (
@@ -65,7 +65,7 @@ export function Research() {
         </ul>
       </Section>
 
-      <Section n="02" title="Working Papers">
+      <Section title="Working Papers">
         <ul className="rows">
           <RowHeader cols={['Working Paper', 'Coauthors & Date', 'Read']} />
           {workingPapers.map((item, i) => (

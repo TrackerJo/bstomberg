@@ -65,11 +65,9 @@ export function RowHeader({ cols }: { cols: [string, string, string] }) {
  * column, including the gutter.
  */
 export function Section({
-  n,
   title,
   children,
 }: {
-  n: string;
   title: string;
   children: ReactNode;
 }) {

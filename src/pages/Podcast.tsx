@@ -20,7 +20,7 @@ function PlayGlyph() {
 export function Podcast() {
   return (
     <Page title="Podcast &amp; Media">
-      <Section n="01" title="The Show">
+      <Section title="The Show">
         <SectionBody>
           <div className="show">
             {/* Cover art is a real asset that does not exist yet. A marked,
@@ -64,7 +64,7 @@ export function Podcast() {
         </SectionBody>
       </Section>
 
-      <Section n="02" title="Recent Episodes">
+      <Section title="Recent Episodes">
         <ul className="rows">
           <RowHeader cols={['Episode', 'Length', 'Listen']} />
           {episodes.map((ep, i) => (
@@ -105,7 +105,7 @@ export function Podcast() {
         </ul>
       </Section>
 
-      <Section n="03" title="Press &amp; Commentary">
+      <Section title="Press &amp; Commentary">
         <ul className="rows">
           <RowHeader cols={['Coverage', 'Outlet', 'Date']} />
           {press.map((item, i) => (
@@ -132,7 +132,7 @@ export function Podcast() {
         </ul>
       </Section>
 
-      <Section n="04" title="Media Inquiries">
+      <Section title="Media Inquiries">
         <SectionBody>
           <p className="measure">
             <T v={contact.lede} />

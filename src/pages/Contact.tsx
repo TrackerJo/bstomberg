@@ -5,7 +5,7 @@ import './Contact.css'
 export function Contact() {
   return (
     <Page title="Contact" standfirst={contact.lede}>
-      <Section n="01" title="Direct">
+      <Section title="Direct">
         <SectionBody>
           <form
             className="contact-form"
@@ -43,7 +43,7 @@ export function Contact() {
         </SectionBody>
       </Section>
 
-      <Section n="02" title="Downloads">
+      <Section title="Downloads">
         <SectionBody>
           <div className="button-row">
             {contact.downloads.map((item) => (

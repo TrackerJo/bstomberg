@@ -5,7 +5,7 @@ import { about, site } from '../content'
 export function About() {
   return (
     <Page title="About">
-      <Section n="01" title="Biography">
+      <Section title="Biography">
         <SectionBody>
           <div className="prose">
             <p className="prose__lede">
@@ -20,7 +20,7 @@ export function About() {
         </SectionBody>
       </Section>
 
-      <Section n="02" title="At a Glance">
+      <Section title="At a Glance">
         <SectionBody>
           <dl className="facts">
             <div>
