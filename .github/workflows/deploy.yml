@@ -32,14 +32,17 @@ jobs:
 
       - run: npm run lint
 
-      # BASE_PATH must match the repo name for a project site.
+      # Served from the custom domain root (see public/CNAME), not from a
+      # /bstomberg/ subpath, so BASE_PATH is just "/". GitHub Pages redirects
+      # the old <owner>.github.io/bstomberg/ URL to the custom domain on its
+      # own once the domain is configured, so both URLs keep working.
       # SITE_URL is scheme and host only: the prerender adds BASE_PATH itself.
       # It makes social-card and canonical URLs absolute, which Twitter and
       # some scrapers require.
       - name: Build and prerender
         env:
-          BASE_PATH: /bstomberg/
-          SITE_URL: https://${{ github.repository_owner }}.github.io
+          BASE_PATH: /
+          SITE_URL: https://bstomberg.com
         run: npm run build
 
       - uses: actions/configure-pages@v5

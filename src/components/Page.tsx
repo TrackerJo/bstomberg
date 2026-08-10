@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react'
-import { GutterNumber, LedgerRules } from './Ledger'
-import { T } from './Text'
-import './Page.css'
+import type { ReactNode } from "react";
+import { LedgerRules } from "./Ledger";
+import { T } from "./Text";
+import "./Page.css";
 
 /**
  * Interior page shell.
@@ -17,13 +17,13 @@ export function Page({
   standfirst,
   children,
 }: {
-  title: string
-  standfirst?: string
-  children: ReactNode
+  title: string;
+  standfirst?: string;
+  children: ReactNode;
 }) {
   return (
     <article className="page">
-      <LedgerRules at={['var(--gutter)', 'var(--col-2)', 'var(--col-3)']} />
+      <LedgerRules at={["var(--gutter)", "var(--col-2)", "var(--col-3)"]} />
 
       <header className="page__head row">
         <div className="row__gutter" />
@@ -38,7 +38,7 @@ export function Page({
       </header>
       {children}
     </article>
-  )
+  );
 }
 
 /**
@@ -56,7 +56,7 @@ export function RowHeader({ cols }: { cols: [string, string, string] }) {
         <span className="label entry__links-head">{cols[2]}</span>
       </div>
     </li>
-  )
+  );
 }
 
 /**
@@ -69,24 +69,21 @@ export function Section({
   title,
   children,
 }: {
-  n: string
-  title: string
-  children: ReactNode
+  n: string;
+  title: string;
+  children: ReactNode;
 }) {
   return (
     <section className="section">
       <div className="section__head">
-        <div className="row__gutter">
-          <GutterNumber n={n} />
-        </div>
         <h2 className="section__title">{title}</h2>
       </div>
       {children}
     </section>
-  )
+  );
 }
 
 /** Prose, fact lists, and button rows: anything that is not a ruled list. */
 export function SectionBody({ children }: { children: ReactNode }) {
-  return <div className="section__body">{children}</div>
+  return <div className="section__body">{children}</div>;
 }

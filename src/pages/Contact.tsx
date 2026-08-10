@@ -1,28 +1,45 @@
 import { Page, Section, SectionBody } from '../components/Page'
-import { T } from '../components/Text'
-import { contact } from '../content'
+import { site, contact } from '../content'
+import './Contact.css'
 
 export function Contact() {
   return (
     <Page title="Contact" standfirst={contact.lede}>
       <Section n="01" title="Direct">
         <SectionBody>
-          <dl className="facts">
-            {contact.channels.map((channel) => (
-              <div key={channel.label}>
-                <dt className="label">{channel.label}</dt>
-                <dd>
-                  {channel.href ? (
-                    <a href={channel.href}>
-                      <T v={channel.value} />
-                    </a>
-                  ) : (
-                    <T v={channel.value} />
-                  )}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <form
+            className="contact-form"
+            action={`mailto:${site.email}`}
+            method="post"
+            encType="text/plain"
+          >
+            <div className="field">
+              <label className="label" htmlFor="contact-name">
+                Name
+              </label>
+              <input id="contact-name" name="name" type="text" required />
+            </div>
+
+            <div className="field">
+              <label className="label" htmlFor="contact-email">
+                Email
+              </label>
+              <input id="contact-email" name="email" type="email" required />
+            </div>
+
+            <div className="field">
+              <label className="label" htmlFor="contact-message">
+                Message
+              </label>
+              <textarea id="contact-message" name="message" rows={6} required />
+            </div>
+
+            <div className="button-row">
+              <button type="submit" className="field-button field-button--solid">
+                Send
+              </button>
+            </div>
+          </form>
         </SectionBody>
       </Section>
 
@@ -34,6 +51,9 @@ export function Contact() {
                 {item.label}
               </a>
             ))}
+            <a className="field-button" href={contact.resumeHref} download>
+              Download Resume
+            </a>
           </div>
         </SectionBody>
       </Section>

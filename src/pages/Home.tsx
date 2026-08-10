@@ -1,10 +1,11 @@
-import portrait from '../assets/bridget-stomberg.jpg'
-import { hero, ledgerStrip, site } from '../content'
-import { GutterNumber, LedgerRules } from '../components/Ledger'
-import { T } from '../components/Text'
-import { Link } from '../router'
-import { useRouter } from '../router-context'
-import './Home.css'
+import portrait from "../assets/bridget-stomberg.jpg";
+import { hero, site } from "../content";
+import { LedgerRules } from "../components/Ledger";
+import { MiniFooter } from "../components/MiniFooter";
+import { T } from "../components/Text";
+import { Link } from "../router";
+import { useRouter } from "../router-context";
+import "./Home.css";
 
 export function Home() {
   /**
@@ -12,8 +13,8 @@ export function Home() {
    * render and on hydration, so the entrance plays exactly once per page load
    * and never again when a reader returns to Home from another route.
    */
-  const { navCount } = useRouter()
-  const animate = navCount === 0
+  const { navCount } = useRouter();
+  const animate = navCount === 0;
 
   return (
     <div className="home" data-animate={animate || undefined}>
@@ -21,7 +22,7 @@ export function Home() {
         {/* Only the gutter rule. The interior rules used to run at 52% and
             78%, straight across the photograph; the rules layer is now inset
             to stop where the image begins, so nothing is ruled over her. */}
-        <LedgerRules at={['var(--gutter)']} animated={animate} />
+        <LedgerRules at={["var(--gutter)"]} animated={animate} />
 
         <img
           className="hero__portrait"
@@ -31,10 +32,6 @@ export function Home() {
           alt="Bridget Stomberg, arms folded, in a lavender herringbone blazer against a window wall of daylight."
           fetchPriority="high"
         />
-
-        <div className="hero__gutter">
-          <GutterNumber n="01" />
-        </div>
 
         <div className="hero__copy">
           <h1 className="hero__headline" id="hero-headline">
@@ -68,8 +65,8 @@ export function Home() {
                 href={action.href}
                 className={
                   action.solid
-                    ? 'field-button field-button--solid'
-                    : 'field-button'
+                    ? "field-button field-button--solid"
+                    : "field-button"
                 }
               >
                 {action.label}
@@ -79,16 +76,7 @@ export function Home() {
         </div>
       </section>
 
-      <dl className="strip">
-        {ledgerStrip.map((cell) => (
-          <div className="strip__cell" key={cell.label}>
-            <dt className="label strip__label">{cell.label}</dt>
-            <dd className="strip__value">
-              <T v={cell.value} />
-            </dd>
-          </div>
-        ))}
-      </dl>
+      <MiniFooter />
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
 import { Link } from '../router'
-import { contact, footer, nav, podcast, site } from '../content'
+import { contact, footer, nav, podcast, site, social } from '../content'
 import { T } from './Text'
 import './SiteFooter.css'
 
@@ -47,6 +47,17 @@ export function SiteFooter() {
               </li>
             ))}
             {podcast.subscribe.map((item) => (
+              <li key={item.label}>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="footer__cell">
+          <h2 className="label footer__label">Social</h2>
+          <ul className="footer__list">
+            {social.map((item) => (
               <li key={item.label}>
                 <a href={item.href}>{item.label}</a>
               </li>

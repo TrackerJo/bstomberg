@@ -1,0 +1,31 @@
+.contact-form {
+  display: grid;
+  gap: var(--sp-md);
+  max-width: var(--measure);
+}
+
+.field {
+  display: grid;
+  gap: var(--sp-2xs);
+}
+
+.field input,
+.field textarea {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  color: var(--ink);
+  background: var(--paper);
+  padding: 0.6rem 0.75rem;
+  border: var(--hairline) solid var(--rule-ui);
+  border-radius: var(--radius);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 8rem;
+}
+
+.field input:hover,
+.field textarea:hover {
+  border-color: var(--violet);
+}

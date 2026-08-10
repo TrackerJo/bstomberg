@@ -49,7 +49,7 @@ export const site = {
    * build emits root-relative URLs, which Slack and iMessage resolve fine.
    * Can also be supplied at build time as SITE_URL=https://example.com.
    */
-  url: '',
+  url: 'https://bstomberg.com',
   /** Asserts nothing the placeholders above refuse to assert. */
   description: 'Bridget Stomberg, PhD. Accounting research and public tax policy.',
 }
@@ -257,8 +257,16 @@ export const contact = {
     { label: 'Curriculum Vitae', href: '#' },
     { label: 'Press Kit', href: '#' },
   ],
+  /** Resume PDF, offered as a direct download next to the contact form. */
+  resumeHref: '#',
 }
 
 export const footer = {
   colophon: '[INSERT university, school, building, city, state]',
 }
+
+export const social: { label: string; href: string }[] = [
+  { label: 'LinkedIn', href: '#' },
+  { label: 'YouTube', href: '#' },
+  { label: 'Podcast Website', href: '#' },
+]

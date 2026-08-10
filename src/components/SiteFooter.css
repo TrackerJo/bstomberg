@@ -26,8 +26,8 @@
   letter-spacing: 0.1em;
 }
 
-/* Column headings: full paper, on a hairline, so the footer reads as three
-   ruled columns rather than one field of links. 11.53:1 on the band. */
+/* Column headings: full paper, on a hairline, so the footer reads as ruled
+   columns rather than one field of links. 11.53:1 on the band. */
 .footer .footer__label {
   color: var(--paper);
   margin-bottom: var(--sp-sm);
@@ -96,7 +96,7 @@
 
 @media (min-width: 46rem) {
   .footer__inner {
-    grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 1fr));
   }
 
   .footer__nav {
